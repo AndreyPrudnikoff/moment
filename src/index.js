@@ -17,13 +17,17 @@ const initialState = JSON.parse(localStorage.getItem('playList')) || [];
 const playlist = (state = initialState, action) => {
     if (action.type === 'ADD_TRACK') {
         let newState = [action.payload, ...state];
-        localStorage.setItem('playList', JSON.stringify(newState))
+        localStorage.setItem('playList', JSON.stringify(newState));
         return newState;
-    } else if(action.type === 'TIMER') {
-        let newState = [...state];
-        localStorage.setItem('playList', JSON.stringify(newState))
-        console.log(action.payload[0])
+    } else if(action.type === 'PLAY') {
+        state[action.payload[1]].time = action.payload[0]
+        let newState = [...state, ];
+        localStorage.setItem('playList', JSON.stringify(newState));
         return state;
+    } else if(action.type === 'DELETE_TRACK') {
+        let newState = state.filter((track, index) => index !== parseInt(action.payload));
+        localStorage.setItem('playList', JSON.stringify(newState));
+        return newState;
     }
     return state
 }

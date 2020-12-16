@@ -1,8 +1,8 @@
 import React from "react";
 
-function Minus() {
+function Minus(props) {
     return (
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause-circle"
+        <svg id={props.id} aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause-circle"
              width="30" role="img" xmlns="http://www.w3.org/2000/svg"
              viewBox="0 0 512 512">
             <path fill="#000"

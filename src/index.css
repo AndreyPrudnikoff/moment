@@ -1,10 +1,11 @@
 * {
   margin: 0;
   padding: 0;
-  font: 14pt sans-serif;
+  font: 14pt Georgia sans-serif;
 }
 svg {
-  cursor: pointer;
+  width: 100%;
+  height: 100%;
 }
 svg:hover {
   transform: scale(1.05);
@@ -12,8 +13,10 @@ svg:hover {
 svg:active {
   transform: scale(1);
 }
+
 h1 {
   margin-bottom: 20px;
+  font-size: 28pt;
 }
 h3, h4 {
   width: 40%;
@@ -46,7 +49,6 @@ h3, h4 {
   align-items: center;
 }
 input {
-  font: 14pt Georgia;
   margin-left: 20px;
   border: none;
   outline: none;
@@ -55,19 +57,42 @@ input {
 ::placeholder {
   color: lightgray;
 }
+.add {
+  width: 50px;
+  height: 50px;
+  background-image: url('./assets/play.svg');
+}
 button {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
   outline: none;
   border: none;
-  background: none;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+button:hover {
+  transform: scale(1.05);
+}
+button:active {
+  transform: scale(1);
+}
+.del {
+  background-image: url('./assets/minus.svg');
 }
 .action {
   display: flex;
   gap: 5px;
 }
-/*@media screen*/
-/*and (min-width: 320px)*/
-/*and (max-width: 560px) {*/
-/*  .container {*/
-/*    width: 100%;*/
-/*  }*/
-/*}*/
+.notracks {
+  margin-top: 50px;
+}
+@media screen
+and (min-width: 320px)
+and (max-width: 560px) {
+  .container {
+    width: 100%;
+  }
+}
