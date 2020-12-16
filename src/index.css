@@ -1,7 +1,7 @@
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font: 14pt sans-serif;
 }
 svg {
   cursor: pointer;
@@ -11,6 +11,13 @@ svg:hover {
 }
 svg:active {
   transform: scale(1);
+}
+h1 {
+  margin-bottom: 20px;
+}
+h3, h4 {
+  width: 40%;
+  text-align: left;
 }
 .container {
   padding: 5%;
@@ -25,27 +32,42 @@ svg:active {
   flex-direction: row;
   justify-content: space-between;
 }
-.track {
-  border-top: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
+.tracker-list {
   margin-top: 30px;
-  padding: 5px;
+  border-top: 1px solid lightgray;
+}
+.tracker {
+  border-bottom: 1px solid lightgray;
+  margin: 0;
+  padding: 5px 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
 input {
+  font: 14pt Georgia;
   margin-left: 20px;
   border: none;
   outline: none;
+  width: 100%;
 }
 ::placeholder {
   color: lightgray;
-  font-size: 1.5em;
 }
 button {
   outline: none;
   border: none;
   background: none;
 }
+.action {
+  display: flex;
+  gap: 5px;
+}
+/*@media screen*/
+/*and (min-width: 320px)*/
+/*and (max-width: 560px) {*/
+/*  .container {*/
+/*    width: 100%;*/
+/*  }*/
+/*}*/
