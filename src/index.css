@@ -9,8 +9,12 @@ svg {
 svg:hover {
   transform: scale(1.05);
 }
+svg:active {
+  transform: scale(1);
+}
 .container {
   padding: 5%;
+  margin: 0 auto;
   text-align: center;
   width: 560px;
 }
@@ -21,8 +25,27 @@ svg:hover {
   flex-direction: row;
   justify-content: space-between;
 }
+.track {
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  margin-top: 30px;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
 input {
   margin-left: 20px;
   border: none;
   outline: none;
+}
+::placeholder {
+  color: lightgray;
+  font-size: 1.5em;
+}
+button {
+  outline: none;
+  border: none;
+  background: none;
 }
