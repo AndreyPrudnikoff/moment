@@ -1,5 +1,5 @@
 import React from "react";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import Play from "./buttons/play";
 import moment from "moment";
 
@@ -9,6 +9,7 @@ class App extends React.Component {
         super(props);
         this.toggle = this.toggle.bind(this);
         this.del = this.del.bind(this)
+        this.pause = this.pause.bind(this)
     }
 
     componentDidMount() {
@@ -19,7 +20,7 @@ class App extends React.Component {
         event.preventDefault();
         this.props.onAddTrack({
             title: this.trackInput.value || `track${Date.now()}`,
-            time: moment( "0:0:0AM", "h:mm:ssA" ).format( "HH:mm:ss" ),
+            time: moment("0:0:0AM", "h:mm:ssA").format("HH:mm:ss"),
             playing: true,
             created: Date.now(),
             pause: 0,
@@ -29,11 +30,20 @@ class App extends React.Component {
     }
 
     toggle(event) {
-        setInterval(() => this.props.timeGo(), 1000);
-        if(event) {
+        if (event) {
+            this.props.timeGo(event.target.id);
+            setInterval(() => this.props.timeGo(), 1000);
+        } else {
+            setInterval(() => this.props.timeGo(), 1000);
+        }
+    }
+
+    pause(event) {
+        if (event) {
             this.props.pauseTrack(event.target.id);
         }
     }
+
     del(event) {
         this.props.deleteTrack(event.target.id);
     }
@@ -45,7 +55,8 @@ class App extends React.Component {
                 <div className="wrapper">
                     <form className="form">
                         <input ref={(input) => this.trackInput = input} type="text" placeholder="Enter track name"/>
-                        <button className='add' type='submit' onClick={this.addTrack.bind(this)}><Play color='green' /></button>
+                        <button className='add' type='submit' onClick={this.addTrack.bind(this)}><Play color='green'/>
+                        </button>
                     </form>
                     {this.props.playlist.length
                         ? <div className="tracker-list">
@@ -54,8 +65,14 @@ class App extends React.Component {
                                     <h3>{track.title}</h3>
                                     <h4>{track.time}</h4>
                                     <div className="action">
-                                        <button id={index} className={track.playing ? 'pause' : 'play'} onClick={this.toggle}> </button>
-                                        <button id={index} className="del" onClick={this.del}> </button>
+                                        {!track.playing ?
+                                            <button id={index} className='play' onClick={this.toggle}>
+                                            </button> :
+                                            <button id={index} className='pause' onClick={this.pause}>
+                                            </button>
+                                        }
+                                        <button id={index} className="del" onClick={this.del}>
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -75,8 +92,8 @@ export default connect(state => ({
         onAddTrack: (track) => {
             dispatch({type: 'ADD_TRACK', payload: track});
         },
-        timeGo: () => {
-            dispatch({type: 'PLAY'})
+        timeGo: (id) => {
+            dispatch({type: 'PLAY', payload: id})
         },
         deleteTrack(index) {
             dispatch({type: 'DELETE_TRACK', payload: index})

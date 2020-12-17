@@ -17,13 +17,12 @@ const playlist = (state = initialState, action) => {
         localStorage.setItem('playList', JSON.stringify(newState));
         return newState;
     } else if (action.type === 'PLAY') {
-        let newState = state.map(track => {
-            if (track.pause !== 0) {
+        let newState = state.map((track, index) => {
+            if (index === parseInt(action.payload)) {
+                track.playing = true;
                 track.pauseTime += Date.now() - track.pause;
-                track.pause = 0;
             }
             if (track.playing) {
-
                 track.time = moment(`${timer(parseInt(track.created), parseInt(track.pauseTime))}AM`, "h:mm:ssA").format("HH:mm:ss");
             }
             return track;
@@ -33,8 +32,8 @@ const playlist = (state = initialState, action) => {
     } else if (action.type === 'PAUSE') {
         let newState = state.map((track, index) => {
             if (index === parseInt(action.payload)) {
-                track.playing = !track.playing;
                 track.pause = Date.now();
+                track.playing = false;
             }
             return track;
         });
