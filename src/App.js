@@ -4,44 +4,35 @@ import Play from "./buttons/play";
 import moment from "moment";
 
 
-function timer(createdTrack) {
-    const created = createdTrack || Date.now();
-    let hours = 0;
-    let minutes = 0;
-    let seconds = 0;
-
-    seconds = Math.round(((Date.now() - created) / 1000));
-    if (seconds >= 60) {
-        minutes = Math.floor(seconds / 60);
-        seconds = seconds % 60;
-        if (minutes >= 60) {
-            hours = Math.floor(minutes / 60);
-            minutes = minutes % 60;
-        }
-    }
-    console.log(`${hours}:${minutes}:${seconds}`)
-    return `${hours}:${minutes}:${seconds}`
-}
-
 class App extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.toggle = this.toggle.bind(this);
         this.del = this.del.bind(this)
     }
+
+    componentDidMount() {
+        this.toggle(null)
+    }
+
     addTrack = (event) => {
         event.preventDefault();
         this.props.onAddTrack({
             title: this.trackInput.value || `track${Date.now()}`,
             time: moment( "0:0:0AM", "h:mm:ssA" ).format( "HH:mm:ss" ),
             playing: true,
-            created: Date.now()
+            created: Date.now(),
+            pause: 0,
+            pauseTime: 0
         });
         this.trackInput.value = '';
     }
 
     toggle(event) {
-        this.props.timeGo(event.target.id);
+        setInterval(() => this.props.timeGo(), 1000);
+        if(event) {
+            this.props.pauseTrack(event.target.id);
+        }
     }
     del(event) {
         this.props.deleteTrack(event.target.id);
@@ -84,11 +75,14 @@ export default connect(state => ({
         onAddTrack: (track) => {
             dispatch({type: 'ADD_TRACK', payload: track});
         },
-        timeGo: (index) => {
-            dispatch({type: 'PLAY', payload: index})
+        timeGo: () => {
+            dispatch({type: 'PLAY'})
         },
         deleteTrack(index) {
             dispatch({type: 'DELETE_TRACK', payload: index})
+        },
+        pauseTrack(id) {
+            dispatch({type: 'PAUSE', payload: id})
         }
     })
 )(App);

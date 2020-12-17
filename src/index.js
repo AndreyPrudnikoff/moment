@@ -3,28 +3,11 @@ import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import moment from 'moment';
+import timer from './timer';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-function timer(createdTrack) {
-    const created = createdTrack || Date.now();
-    let hours = 0;
-    let minutes = 0;
-    let seconds = 0;
-
-    seconds = Math.round(((Date.now() - created) / 1000));
-    if (seconds >= 60) {
-        minutes = Math.floor(seconds / 60);
-        seconds = seconds % 60;
-        if (minutes >= 60) {
-            hours = Math.floor(minutes / 60);
-            minutes = minutes % 60;
-        }
-    }
-    console.log(`${hours}:${minutes}:${seconds}`)
-    return `${hours}:${minutes}:${seconds}`
-}
 
 const initialState = JSON.parse(localStorage.getItem('playList')) || [];
 
@@ -34,16 +17,29 @@ const playlist = (state = initialState, action) => {
         localStorage.setItem('playList', JSON.stringify(newState));
         return newState;
     } else if (action.type === 'PLAY') {
-        setInterval(() => {
-            let newState = state.map((track, index) => {
-                if (index === parseInt(action.payload)) {
-                    track.time = moment(`${timer(parseInt(track.created))}AM`, "h:mm:ssA").format("HH:mm:ss");
-                } else return track;
-                return track;
-            });
-            localStorage.setItem('playList', JSON.stringify(newState));
-            return state;
-        }, 1000)
+        let newState = state.map(track => {
+            if (track.pause !== 0) {
+                track.pauseTime += Date.now() - track.pause;
+                track.pause = 0;
+            }
+            if (track.playing) {
+
+                track.time = moment(`${timer(parseInt(track.created), parseInt(track.pauseTime))}AM`, "h:mm:ssA").format("HH:mm:ss");
+            }
+            return track;
+        });
+        localStorage.setItem('playList', JSON.stringify(newState));
+        return newState;
+    } else if (action.type === 'PAUSE') {
+        let newState = state.map((track, index) => {
+            if (index === parseInt(action.payload)) {
+                track.playing = !track.playing;
+                track.pause = Date.now();
+            }
+            return track;
+        });
+        localStorage.setItem('playList', JSON.stringify(newState));
+        return newState;
     } else if (action.type === 'DELETE_TRACK') {
         let newState = state.filter((track, index) => index !== parseInt(action.payload));
         localStorage.setItem('playList', JSON.stringify(newState));
